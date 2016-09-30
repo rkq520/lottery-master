@@ -726,10 +726,17 @@ public class Lottery {
 
     }
 
+    /**
+     *IEntity数据接口
+     */
     public  interface IEntity{
+        /*彩票种类名称|例如：双色球*/
         public String getLotName();
+        /*彩票期号*/
         public String getIssue();
+        /*彩票中奖号码*/
         public String getBalls();
+        /*彩票开奖日期*/
         public String getDate();
     }
 

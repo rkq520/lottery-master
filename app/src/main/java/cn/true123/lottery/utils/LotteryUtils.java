@@ -34,9 +34,10 @@ import cn.true123.lottery.model.LotteryHistory;
  * Created by feimeng0530 on 2016/3/18.
  */
 public class LotteryUtils {
-    static ProgressDialog pd;
-    static Map<String, String> cacheNameId = new HashMap();
-    static Map<String, String> cacheAvailableNameId = new HashMap();
+    static ProgressDialog pd;//进度条对话属性
+    static Map<String, String> cacheNameId = new HashMap();//Map<双色球,220051>
+    static Map<String, String> cacheAvailableNameId = new HashMap();//可变的Map<>键值对
+    //彩票名字和识别代码
     public static String[] lotteryNameAndId = {
             "220051|双色球|1",
             "120029|大乐透|1",
@@ -67,6 +68,9 @@ public class LotteryUtils {
             "130041|北京单场|0",
             "130043|竞彩篮球|0"};
 
+    /**
+     * 静态代码块 自动执行
+     */
     static {
         for (String item : lotteryNameAndId) {
             String[] spItems = item.split("\\|");
@@ -74,23 +78,24 @@ public class LotteryUtils {
 
                 cacheNameId.put(spItems[1], spItems[0]);
                 cacheNameId.put(spItems[0], spItems[1]);
+
                 if ("1".equals(spItems[2])) {
                     cacheAvailableNameId.put(spItems[1], spItems[0]);
                 }
             }
         }
     }
-
+    //getMap
     public static Map getAllAvailable() {
 
         return cacheAvailableNameId;
     }
 
-    //
+    //getId 根据Map<>键
     public static String getId(String name) {
         return cacheNameId.get(name);
     }
-
+    //getId - entity
     public static String getId(Lottery.IEntity entity) {
 
         return getId(entity != null ? entity.getLotName().trim() : null);
@@ -101,17 +106,20 @@ public class LotteryUtils {
         return cacheNameId.get(id);
     }
 
+    /*
+    * 获取开奖号码数据
+    */
     public static List<Ball> getBall(Lottery.IEntity entity) {
         Log.i("SS", "entity=" + (entity != null ? entity.getBalls() : "") + (entity != null ? entity.getLotName() : ""));
         List ret = new ArrayList();
         if (entity != null) {
             String ball = entity.getBalls();
             if (ball != null && ball.indexOf("+") >= 0) {
-                String[] redBlue = ball.split("\\+");
-                String[] reds = trim(redBlue[0]).split(" ");
+                String[] redBlue = ball.split("\\+");//红+蓝球
+                String[] reds = trim(redBlue[0]).split(" ");//
                 String[] blues = trim(redBlue[1]).split(" ");
+                //210053 福彩3D
                 if ("210053".equals(getId(entity))) {
-
                     reds = toStringArray(trim(redBlue[0]));
                     blues = toStringArray(trim(redBlue[1]));
                 }
